@@ -28,11 +28,21 @@ sendMessage() {
 
 createBackup() {
    local where=$1
+   local filenametemp=$2
 
    if [ "$where" = "locally" ]; then
-      mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > "temp$FOLDERNAME/$FILENAME"
+      mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > "temp$FOLDERNAME/$filenametemp"
    else
-      mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > "$EXTERNAL_DEVICE_PATH/$FOLDERNAME/$FILENAME"
+      mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > "$EXTERNAL_DEVICE_PATH/$FOLDERNAME/$filenametemp"
+   fi
+}
+
+checkErrorsAfterBackup() {
+   local filenametemp=$2
+
+   if [ $? -ne 0 ]; then
+         sendMessage "[$filenametemp] > Error while executing command: mysqldump"
+         exit 1
    fi
 }
 
@@ -43,13 +53,12 @@ if [ -d "$EXTERNAL_DEVICE_PATH" ]; then
    mkdir -p "$EXTERNAL_DEVICE_PATH/$FOLDERNAME"
 
    ### Making the Backup
-   createBackup "external"
+   createBackup "external" "$FILENAME"
 
    ### Checking for Errors on Command Execution
-   if [ $? -ne 0 ]; then
-      sendMessage "[$FILENAME] > Error while executing command: mysqldump"
-      exit 1
-   fi
+   checkErrorsAfterBackup "$FILENAME"
+
+   ### Send Successful Message
    sendMessage "[$FILENAME] > Backup Created on External Device!"
 else
    ### External Device NOT Connected!
@@ -58,12 +67,11 @@ else
    mkdir -p "temp$FOLDERNAME"
 
    ### Making the Backup
-   createBackup "locally"
+   createBackup "locally" "$FILENAME"
 
    ### Checking for Errors on Command Execution
-   if [ $? -ne 0 ]; then
-      sendMessage "[$FILENAME] > Error while executing command: mysqldump"
-      exit 1
-   fi
+   checkErrorsAfterBackup "$FILENAME"
+
+   ### Send Successful Message
    sendMessage "[$FILENAME] > Backup Created Locally!"
 fi
