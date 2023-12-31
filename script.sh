@@ -7,7 +7,7 @@ DB_PASS="XXX"
 DB_NAME="XXX"
 EXTERNAL_DEVICE_PATH="XXX"
 FOLDERNAME="XXX"
-FILENAME="$(date +'DATABASE_%m-%d-%Y').sql"
+FILENAME="${DB_NAME}_$(date +'%d-%m-%Y').sql"
 SEND_DISCORDWEBHOOK="NO" # Options: YES or NO
 DISCORD_WEBHOOKURL="XXX"
 ### ======================================= ###
