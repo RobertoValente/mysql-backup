@@ -32,6 +32,9 @@ chmod u+x script.sh
 
 # Execute the script to check if everything is Ok
 ./script.sh
+
+# You can also check the logs of the script
+cat logsBackup.txt
 ```
 
 # 📌 To Run Infinitely (CronJob Creation)
@@ -55,6 +58,7 @@ crontab -e
 - `<time_configuration>` - Replace to when you want the file to be executed by OS ([learn how to specific the time here](https://betterstack.com/community/questions/how-to-set-up-cron-job-for-specific-time-and-date/))
 - `<pwd_command_result>` - Replace to the Output of PWD command (example: /home/robertovalente/mysql-backup)
 
-# 📌 Final Result
-...
-- **If you need some help**, choose a contact method and send me a message: https://github.com/RobertoValente
+# 📌 Final Result with Discord Webhook (Screenshot)
+<img src="https://i.imgur.com/NYumsGA.png">
+
+- <b>If you need some help,</b> choose a contact method and send me a message: https://github.com/RobertoValente
