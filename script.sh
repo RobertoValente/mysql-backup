@@ -17,13 +17,13 @@ sendMessage() {
 
    if [ "$SEND_DISCORDWEBHOOK" = "YES" ]; then
       if ! ping -q -c 1 -W 1 google.com > /dev/null; then
-         echo "/!\ > Not connected to WIFI!" >> logsBackup.txt
+         echo "/!\ > Not connected to WIFI!" >> "mysql-backup/logsBackup.txt"
          exit
       else
          curl -X POST $DISCORD_WEBHOOKURL  -H "Content-Type: application/json" -d "{\"content\": \"\`\`\`css\n${message}\`\`\`\"}"
       fi
    fi
-   echo "$message" >> logsBackup.txt
+   echo "$message" >> "mysql-backup/logsBackup.txt"
 }
 
 createBackup() {
@@ -31,7 +31,7 @@ createBackup() {
    local filenametemp=$2
 
    if [ "$where" = "locally" ]; then
-      mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > "temp$FOLDERNAME/$filenametemp"
+      mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > "mysql-backup/temp$FOLDERNAME/$filenametemp"
    else
       mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > "$EXTERNAL_DEVICE_PATH/$FOLDERNAME/$filenametemp"
    fi
@@ -64,7 +64,7 @@ else
    ### External Device NOT Connected!
 
    ### Checking for Backup Folder
-   mkdir -p "temp$FOLDERNAME"
+   mkdir -p "mysql-backup/temp$FOLDERNAME"
 
    ### Making the Backup
    createBackup "locally" "$FILENAME"
